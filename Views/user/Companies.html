@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies</title>
+    <link rel="stylesheet" href="../../../assets/css/sass/AdminPanel.css">
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .card img {
+            max-width: 100%;
+            border-radius: 8px 8px 0 0;
+        }
+        .card h3 {
+            margin: 16px 0 8px;
+        }
+        .card p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container" id="card-container">
+        <!-- Cards will be dynamically inserted here -->
+    </div>
+
+    <script>
+        async function fetchCompanies() {
+            try {
+                const response = await fetch('http://localhost:5005/api/companies');
+                const companies = await response.json();
+                const cardContainer = document.getElementById('card-container');
+
+                companies.forEach(company => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.onclick = () => {
+                        window.location.href = `companydetails.html?id=${company.id}`; // Generate the desired URL structure
+                    };
+
+                    const img = document.createElement('img');
+                    img.src = company.logoUrl; // Assuming the API returns a logoUrl field
+                    img.alt = `Logo of ${company.name}`;
+
+                    const h3 = document.createElement('h3');
+                    h3.textContent = company.name;
+
+                    const p = document.createElement('p');
+                    p.textContent = company.description;
+
+                    card.appendChild(img);
+                    card.appendChild(h3);
+                    card.appendChild(p);
+
+                    cardContainer.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching companies:', error);
+            }
+        }
+
+        // Fetch companies when the page loads
+        window.onload = fetchCompanies;
+    </script>
+</body>
+</html>

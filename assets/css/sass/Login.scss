@@ -1,0 +1,99 @@
+// Değişkenler (varsa projenizdeki _variables.scss dosyasına ekleyin)
+//$primary-color: #4056a1;
+
+@import './partials/_variables.scss';
+
+// Login Container
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $light-grey;
+}
+
+.login-box {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: $primary-color;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    
+    label {
+      font-size: 14px;
+      margin-bottom: 8px;
+      text-align: left;
+      color: #62717c;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid $dark-grey;
+      font-size: 16px;
+      outline: none;
+
+      &:focus {
+        border-color: $dark-blue;
+      }
+    }
+  }
+
+  .btn-login {
+    background-color: $orange;
+    border: none;
+    padding: 12px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 20px;
+
+    &:hover {
+      background-color: darken($orange, 10%);
+    }
+  }
+
+  .btn-guest{
+    background-color: $primary-color;
+    border: none;
+    padding: 12px;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 20px;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .signup-link {
+    font-size: 14px;
+    color: #62717c;
+
+    a {
+      color: $dark-blue;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

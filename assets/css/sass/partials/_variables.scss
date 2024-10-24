@@ -1,0 +1,61 @@
+$primary-color: #2d2f31;
+$dark-grey: #ccc;
+$light-grey: #f2f4f8;
+$bold-blue: #030521;
+$dark-blue: #4056a1;
+$light-blue: #00AAEF;
+$orange: #f06548;
+$red: #ff331f;
+$light-green: #e1ffee;
+$light-blue: #ddffff;
+$green: #00a86b;
+
+$hover-black-background-transparent: #aaa4;
+$hover-white-background-transparent: #fff4;
+
+$section-padding: 20px 200px;
+$mobile-section-padding: 20px;
+
+$medium-screen: 600px;
+
+@mixin icon-btn(){
+  width: 40px;
+  font-size: 26px;
+  height: 40px;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin section-padding($top) {
+  @media only screen and (min-width: 1500px){
+    padding: $top 12vw;
+  }
+  @media only screen and (min-width: $medium-screen) and (max-width: 1499px){
+    padding: $top 5vw;
+  }
+}
+
+@mixin box-shadow {
+  box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.3);
+}
+@mixin input {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 8px;
+}
+
+@mixin action-button($color) {
+  background-color: $color;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}

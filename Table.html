@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="icon" type="image/png" href="/assets/img/MRPos.png" />
+    <link rel="stylesheet" href="./assets/css/sass/AdminPanel.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+  </head>
+
+  <body>
+    <aside>
+      <div id="aside_head">
+        <img src="assets/img/MRPos.png" alt="" />
+        <p>MRPos</p>
+      </div>
+      <ul>
+        <li class="active">
+          <a href="#" class="aside-link">
+            <i class="fas fa-home"></i>
+            <p>Statistika</p>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="aside-link">
+            <i class="fas fa-user"></i>
+            <p>İstifadəçilər</p>
+          </a>
+        </li>
+        <li>
+          <a href="/employees" class="aside-link">
+            <i class="fas fa-user-tie"></i>
+            <p>İşçilər</p>
+          </a>
+        </li>
+        <li>
+          <a href="/categories" class="aside-link">
+            <i class="fas fa-dice-d20"></i>
+            <p>Kateqoriyalar</p>
+          </a>
+        </li>
+        <li>
+          <a href="/products" class="aside-link">
+            <i class="fas fa-boxes"></i>
+            <p>Məhsullar</p>
+          </a>
+        </li>
+        <li class="has-menu">
+          <div class="content open-sub-menu">
+            <div class="sub-menu-header">
+              <i class="fas fa-receipt"></i>
+              <p>Sifarişlər</p>
+            </div>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+
+          <div class="sub-menu">
+            <a href="#" class="aside-link">
+              <p>Tamamlanmış</p>
+            </a>
+            <a href="#" class="aside-link">
+              <p>Aktiv</p>
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/branches" class="aside-link">
+            <i class="fas fa-building"></i>
+            <p>Filiallar</p>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <header>
+      <div id="header-left">
+        <i id="menubtn" class="fas fa-bars"></i>
+        <input type="text" placeholder="Axtar..." />
+      </div>
+      <div id="header-right">
+        <i id="notficiationsbtn" class="fas fa-bell hasnot"></i>
+        <div id="user-data">
+          <img
+            src="/public/Images/ProfilePictures/Yagmur_Novruzov.jpg"
+            alt=""
+          />
+          <p>Yagmur N.</p>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+
+      <div id="notficiations-menu">
+        <div class="header">
+          <p class="title">Bildirişlər</p>
+          <p class="new">4 yeni</p>
+        </div>
+        <div class="content">
+          <div class="alert">
+            <i class="fas fa-cog settings-alert"></i>
+            <div class="alert-content">
+              <p class="message">Hesabınızın şifrəsi uğurla dəyişdirildi</p>
+              <p class="time"><i class="fas fa-history"></i> 2 saat əv.</p>
+            </div>
+          </div>
+          <div class="alert">
+            <i class="fas fa-comment-dots message-alert"></i>
+            <div class="alert-content">
+              <p class="message">Oxunamamış mesajlarınız var</p>
+              <p class="time"><i class="fas fa-history"></i> 5 saat əv.</p>
+            </div>
+          </div>
+          <a class="seeall" href="#"
+            >Hamısına bax <i class="fas fa-long-arrow-alt-right"></i
+          ></a>
+        </div>
+      </div>
+      <div id="profile-menu">
+        <div class="header">
+          <p class="title">Profil menyu</p>
+        </div>
+        <div class="content">
+          <button onclick="openModal('logoContainer')">
+            <i class="fas fa-user"></i>
+            <p>Profilim</p>
+          </button>
+          <a href="#"
+            ><i class="fas fa-cog"></i>
+            <p>Parametrlər</p></a
+          >
+          <a class="logout" href="Login.html"
+            ><i class="fas fa-sign-out-alt"></i>
+            <p>Çıxış</p></a
+          >
+        </div>
+      </div>
+    </header>
+
+    <div id="content">
+      <div id="dynamicTable">
+        <thead>
+          <tr>
+            <td colspan="5">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Axtar..." />
+            </td>
+          </tr>
+
+          <tr>
+            <th>№</th>
+            <th>Məhsulun adı</th>
+            <th>Qiyməti</th>
+            <th>Kateqoriya</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Marqarita</td>
+            <td>12.99</td>
+            <td>Pizza</td>
+            <td class="actions">
+              <i class="fas fa-cog"></i>
+              <i class="fas fa-chevron-down"></i>
+              <ul class="sub-menu">
+                <li>
+                  <a href="">
+                    <i class="fas fa-trash"></i>
+                    <p>Sil</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="">
+                    <i class="fas fa-pen"></i>
+                    <p>Düzəliş</p>
+                  </a>
+                </li>
+                <li>
+                  <a href="">
+                    <i class="fas fa-search"></i>
+                    <p>Ətraflı</p>
+                  </a>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </div>
+
+      <div class="pagination">
+        <a href="#" class="prev disabled">‹ Əvvəlki</a>
+        <a href="#" class="page active">1</a>
+        <a href="#" class="page">2</a>
+        <a href="#" class="page">3</a>
+        <a href="#" class="page">4</a>
+        <a href="#" class="page">5</a>
+        <a href="#" class="next">Növbəti ›</a>
+      </div>
+
+      <div class="addrow" id="adddata">
+        <i class="fas fa-plus"></i>
+        <p>Yeni <span id="newDataName"></span></p>
+      </div>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="modal-body"></div>
+          <!-- Modal içeriği burada yüklenecek -->
+        </div>
+      </div>
+
+      <div id="deletemodal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="delete-modal-body"></div>
+        </div>
+      </div>
+
+      <div id="logoContainer" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="delete-modal-body">
+            <h3>Şirkət Loqosu</h3>
+            <form id="uploadLogoForm" enctype="multipart/form-data">
+              <input
+                type="file"
+                id="companyLogo"
+                name="companyLogo"
+                accept=".jpg, .jpeg, .png"
+                required
+              />
+              <button type="submit">Loqonu Yüklə</button>
+            </form>
+            <img
+              id="companyLogoImage"
+              src=""
+              alt="Company Logo"
+              style="display: none; max-width: 200px; margin-top: 20px"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div id="productsModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('productsModal')"
+            >&times;</span
+          >
+          <h2>Məhsul siyahısı</h2>
+          <ul id="productsList">
+            <!-- Ürünler buraya eklenecek -->
+          </ul>
+        </div>
+      </div>
+
+      <div id="roleEditModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('roleEditModal')"
+            >&times;</span
+          >
+          <h2>Rolu dəyiş</h2>
+          <div id="role-edit-modal-body">
+            <!-- Role assignment form will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for changing user's branch -->
+      <div id="changeBranchModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('changeBranchModal')"
+            >&times;</span
+          >
+          <h2>İşçinin filialını dəyiş</h2>
+          <div id="change-branch-modal-body">
+            <form id="changeBranchForm">
+              <div>
+                <label for="branchSelect">Filialı seç:</label>
+                <select id="branchSelect" name="branch">
+                  <!-- Branch options will be dynamically loaded here -->
+                </select>
+              </div>
+              <button type="submit" class="primaryaction">Filialı dəyiş</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./assets/js/Layout.js"></script>
+    <script type="module" src="./assets/js/Scroll.js"></script>
+    <script type="module" src="./assets/js/Table.js"></script>
+    <script type="module" src="./assets/js/Modal.js"></script>
+
+    <script src="./Views/admin/components/Employee/LoadEmployees.js"></script>
+    <script src="./Views/admin/components/Category/LoadCategories.js"></script>
+    <script src="./Views/admin/components/Branch/LoadBranches.js"></script>
+    <script src="./Views/admin/components/Product/LoadProducts.js"></script>
+    <script src="./Views/admin/components/Table/LoadTables.js"></script>
+    <script src="./Views/admin/components/Order/LoadOrder.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadContent(location.pathname);
+
+        let pageToLoad;
+        let adddata;
+
+        const token = localStorage.getItem("token");
+        const decodedToken = jwt_decode(token);
+        const company = decodedToken.company;
+        const branch = decodedToken.branch;
+        const userRole = decodedToken.roles; // Assuming the role is stored in the 'roles' field
+
+        function renderSidebar() {
+          const sidebar = document.querySelector("aside ul");
+          sidebar.innerHTML = ""; // Clear existing sidebar items
+
+          if (userRole === "director") {
+            sidebar.innerHTML = `
+          <li>
+            <a href="/tables" class="aside-link">
+              <i class="fas fa-table"></i>
+              <p>Masalar</p>
+            </a>
+          </li>
+          <li>
+            <a href="/products" class="aside-link">
+              <i class="fas fa-boxes"></i>
+              <p>Məhsullar</p>
+            </a>
+          </li>
+          <li class="has-menu">
+            <div class="content open-sub-menu">
+              <div class="sub-menu-header">
+                <i class="fas fa-receipt"></i>
+                <p>Sifarişlər</p>
+              </div>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="sub-menu">
+              <a href="/completedorders" class="aside-link">
+                <p>Tamamlanmış</p>
+              </a>
+              <a href="/activeorders" class="aside-link">
+                <p>Aktiv</p>
+              </a>
+            </div>
+          </li>
+        `;
+          } else {
+            sidebar.innerHTML = `
+          <li class="active">
+            <a href="#" class="aside-link">
+              <i class="fas fa-home"></i>
+              <p>Statistika</p>
+            </a>
+          </li>
+          <li>
+            <a href="/employees" class="aside-link">
+              <i class="fas fa-user-tie"></i>
+              <p>İşçilər</p>
+            </a>
+          </li>
+          <li>
+            <a href="/categories" class="aside-link">
+              <i class="fas fa-dice-d20"></i>
+              <p>Kateqoriyalar</p>
+            </a>
+          </li>
+          <li>
+            <a href="/products" class="aside-link">
+              <i class="fas fa-boxes"></i>
+              <p>Məhsullar</p>
+            </a>
+          </li>
+          <li>
+            <a href="/branches" class="aside-link">
+              <i class="fas fa-building"></i>
+              <p>Filiallar</p>
+            </a>
+          </li>
+        `;
+          }
+          $(".open-sub-menu").click(function () {
+            $(this).children("i").toggleClass("fa-chevron-down fa-chevron-up");
+            $(this).siblings(".sub-menu").toggle();
+          });
+        }
+
+        renderSidebar();
+
+        document
+          .getElementById("uploadLogoForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            const form = event.target; // Get the form element
+            const fileInput = form.querySelector('input[type="file"]'); // Get the file input
+            const file = fileInput.files[0]; // Access the first file in the input (since it's one file)
+
+            // Now you can pass this file to your upload function or perform any operation
+            uploadCompanyLogo(file);
+          });
+        document.querySelectorAll(".aside-link").forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const path = this.getAttribute("href");
+
+            document.querySelectorAll("li.active").forEach((li) => {
+              li.classList.remove("active");
+            });
+
+            this.parentElement.classList.add("active");
+
+            history.pushState(null, "", path);
+            loadContent(path);
+          });
+        });
+
+        function isTokenExpired(token) {
+          if (!token) return true; // Token yoksa expired kabul edilir.
+
+          const decodedToken = jwt_decode(token);
+          const currentTime = Date.now() / 1000; // Zamanı saniye olarak alır
+
+          return decodedToken.exp < currentTime; // Token süresi geçmişse true döner
+        }
+
+        window.onpopstate = function () {
+          loadContent(location.pathname);
+        };
+
+        async function loadContent(path) {
+          const token = localStorage.getItem("token");
+          const addDataContent = document.getElementById("newDataName");
+
+          if (isTokenExpired(token)) {
+            localStorage.removeItem("token");
+            window.location.href = "/login.html";
+          }
+
+          let apiUrl;
+          let tableView;
+
+          const decodedToken = jwt_decode(token);
+          const table = document.getElementById("dynamicTable");
+          table.innerHTML = "";
+
+          switch (path) {
+            case "/categories":
+              tableView = await fetch(
+                "./views/admin/components/Category/CategoryTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadCategories();
+
+              adddata = "http://localhost:5002/api/categories";
+              newDataName.innerHTML = "Kateqoriya";
+              pageToLoad =
+                "./views/admin/components/Category/CategoryCreate.html";
+              break;
+            case "/branches":
+              tableView = await fetch(
+                "./views/admin/components/Branch/BranchTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadBranches();
+
+              adddata = "http://localhost:5005/api/branches";
+              newDataName.innerHTML = "Filial";
+              pageToLoad = "./views/admin/components/Branch/BranchCreate.html";
+              break;
+            case "/products":
+              // If the user is not a branch manager, show all products
+              if (branch === "NoBranch") {
+                tableView = await fetch(
+                  "./views/admin/components/Product/ProductTable.html"
+                );
+                table.innerHTML = await tableView.text();
+                loadProducts();
+
+                adddata = `http://localhost:5002/api/products`;
+                newDataName.innerHTML = "Məhsul";
+                pageToLoad =
+                  "./views/admin/components/Product/ProductCreate.html";
+                break;
+              } else {
+                // If the user is a branch manager, show only the products of the branch
+                tableView = await fetch(
+                  "./views/admin/components/Product/ProductTable.html"
+                );
+                table.innerHTML = await tableView.text();
+                loadMenuProducts();
+
+                adddata = `http://localhost:5004/api/menu`;
+                newDataName.innerHTML = "Məhsul";
+                pageToLoad =
+                  "./views/admin/components/Product/MenuProductCreate.html";
+                break;
+              }
+
+            case "/employees":
+              tableView = await fetch(
+                "./views/admin/components/Employee/EmployeeTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadEmployees();
+
+              adddata = `http://localhost:5006/api/employees`;
+              newDataName.innerHTML = "İşçi";
+              pageToLoad =
+                "./views/admin/components/Employee/EmployeeCreate.html";
+              break;
+            case "/tables":
+              tableView = await fetch(
+                "./views/admin/components/Table/TableTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadTables();
+
+              adddata = `http://localhost:5005/api/tables`;
+              newDataName.innerHTML = "Masa";
+              pageToLoad = "./views/admin/components/Table/TableCreate.html";
+              break;
+            case "/":
+              tableView = await fetch(
+                "./views/admin/components/Statistics/StatisticsTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              break;
+            case "/completedorders":
+              tableView = await fetch(
+                "./views/admin/components/Order/OrderTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadOrders("completed");
+              break;
+            case "/activeorders":
+              tableView = await fetch(
+                "./views/admin/components/Order/OrderTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadOrders("active");
+              break;
+            default:
+              break;
+          }
+        }
+
+        async function uploadCompanyLogo(file) {
+          const token = localStorage.getItem("token");
+
+          const form = document.getElementById("uploadLogoForm");
+          const formData = new FormData();
+          formData.append("image", file);
+          console.log(formData);
+
+          try {
+            const response = await fetch(
+              `http://localhost:5005/api/companies/edit-image?companyId=${company}`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Logo could not be uploaded.");
+            }
+
+            const data = await response.json();
+            const logoImage = document.getElementById("companyLogoImage");
+            logoImage.src = data.url;
+            logoImage.style.display = "block";
+            alert("Logo uploaded successfully.");
+          } catch (error) {
+            console.error("Error uploading logo:", error);
+            alert("Error uploading logo: " + error.message);
+          }
+        }
+
+        document
+          .getElementById("adddata")
+          .addEventListener("click", function () {
+            const modal = document.getElementById("modal");
+            const modalBody = document.getElementById("modal-body");
+
+            fetch(pageToLoad)
+              .then((response) => response.text())
+              .then((data) => {
+                modalBody.innerHTML = data;
+                modal.style.display = "block";
+
+                if (
+                  location.pathname === "/products" &&
+                  branch === "NoBranch"
+                ) {
+                  fillCategoriesForForm();
+                } else if (
+                  location.pathname === "/products" &&
+                  branch !== "NoBranch"
+                ) {
+                  fillProductsForMenuForm();
+                }
+
+                const form = document.getElementById("addDataForm");
+                form.addEventListener("submit", function (event) {
+                  event.preventDefault();
+                  const formData = new FormData(event.target);
+                  
+                  
+                  console.log((location.pathname === "/branches"));
+                  
+                  
+                  if (location.pathname === "/branches")
+                  {
+                    const branchFormData = {
+                      name: document.getElementById("name").value,
+                      is24Hour: document.getElementById("is24Hour").checked,
+                      serviceFee: parseFloat(
+                        document.getElementById("serviceFee").value
+                      ),
+                      opening: document.getElementById("opening").value + ":00",
+                      closing: document.getElementById("closing").value + ":00",
+                      address: {
+                        googleMapsLocation:
+                          document.getElementById("googleMapsLocation").value,
+                        googleMapsEmbed:
+                          document.getElementById("googleMapsEmbed").value,
+                        country: document.getElementById("country").value,
+                        city: document.getElementById("city").value,
+                        region: document.getElementById("region").value,
+                        street: document.getElementById("street").value,
+                      },
+                    };
+
+                    
+                    fetch("http://localhost:5005/api/branches", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "token"
+                        )}`,
+                      },
+                      body: JSON.stringify(branchFormData),
+                    })
+                      .then((response) => {
+                        if (!response.ok) {
+                          console.log(response);
+                          
+                          throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                      })
+                      .then((data) => {
+                        alert("Filial uğurla artırıldı!");
+                        // Optionally, redirect or update the UI
+                      })
+                      .catch((error) => {
+                        console.error("Error:", error);
+                        alert("Filial artırılarkən xəta baş verdi.");
+                      });
+
+                    return;
+                  }
+                  const formObject = {};
+
+                  formData.forEach((value, key) => {
+                    formObject[key] = value;
+                  });
+
+                  console.log(formObject);
+
+                  const endpoint = adddata;
+
+                  // Token'ı al
+                  const token = localStorage.getItem("token");
+
+                  // POST isteği gönder
+                  fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formObject),
+                  })
+                    .then((response) => {
+                      if (response.ok) {
+                        alert("Uğurla artırıldı");
+                        modal.style.display = "none"; // Modali kapat
+                        loadContent(location.pathname);
+                      } else {
+                        console.log(response);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Error:", error);
+                    });
+                });
+              });
+          });
+      });
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

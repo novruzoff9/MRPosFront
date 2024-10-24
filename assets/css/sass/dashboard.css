@@ -1,0 +1,165 @@
+@charset "UTF-8";
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f2f4f8 !important;
+}
+
+button.primaryaction {
+  background-color: #4056a1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+button.deleteaction {
+  background-color: #ff331f;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+button.successaction {
+  background-color: #00a86b;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 50px 0;
+}
+@media only screen and (min-width: 1500px) {
+  section {
+    padding: 20px 12vw;
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 1499px) {
+  section {
+    padding: 20px 5vw;
+  }
+}
+section h2 {
+  margin: 50px auto;
+  color: #030303;
+}
+section h2.header-title {
+  margin: 50px auto 10px auto;
+  color: #030303;
+}
+section h5 {
+  margin: 0 auto 40px auto;
+  color: #62717c;
+}
+
+.modal {
+  display: none; /* Başlangıçta gizli */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding-top: 60px;
+}
+.modal .modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 800px;
+}
+.modal .modal-content .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.modal .modal-content .close:hover,
+.modal .modal-content .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal .modal-content button {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+#adddata {
+  display: flex;
+  flex-direction: row;
+  background-color: #4056a1;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+#adddata p,
+#adddata i {
+  color: white;
+  margin: 0;
+}
+
+#addDataContainer form {
+  display: flex;
+  flex-direction: column;
+}
+#addDataContainer form input,
+#addDataContainer form select {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 8px;
+}
+#addDataContainer form button {
+  background-color: #4056a1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+#roleEditModal .modal-content h2 {
+  margin-bottom: 20px;
+  color: #2d2f31;
+}
+#roleEditModal .modal-content form {
+  display: flex;
+  flex-direction: column;
+}
+#roleEditModal .modal-content form div {
+  margin-bottom: 10px;
+}
+#roleEditModal .modal-content form div select {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 8px;
+}
+#roleEditModal .modal-content form button {
+  background-color: #4056a1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}/*# sourceMappingURL=dashboard.css.map */

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiter Panel</title>
+    <link rel="icon" type="image/png" href="/assets/img/MRPos.png" />
+    <link rel="stylesheet" href="assets/css/sass/WaiterPanel.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>İşçi Paneli</h1>
+      <div id="tables-container" class="tables-container">
+        <!-- Tables will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('orderModal')">&times;</span>
+        <h2>Sifariş artır</h2>
+        <div id="order-modal-body">
+          <form id="orderForm">
+            <div id="productEntries">
+              <div class="product-entry">
+                <label for="productSelect">Məhsul:</label>
+                <select class="productSelect" name="product">
+                  <!-- Options will be dynamically loaded -->
+                </select>
+                <label for="quantity">Miqdar:</label>
+                <input
+                  type="number"
+                  class="quantity"
+                  name="quantity"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="button"
+              class="primaryaction"
+              onclick="addProductEntry()"
+            >
+              Başqa məhsul artır
+            </button>
+            <button type="submit" class="primaryaction">Sifarişə artır</button>
+          </form>
+          <div id="orderTotal">
+            <h3>Ümumi: &#8380;<span id="totalPrice">0.00</span></h3>
+          </div>
+          <button
+            id="completeOrderBtn"
+            class="successaction"
+            onclick="completeOrder()"
+          >
+            Sifarişi tamamla
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Order Modal -->
+    <div id="confirmOrderModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('confirmOrderModal')"
+          >&times;</span
+        >
+        <h2>Sifariş aç</h2>
+        <p>Bu masa üçün sifariş açılsınmı?</p>
+        <button class="primaryaction" id="confirmYesBtn">Bəli</button>
+        <button class="deleteaction" onclick="closeModal('confirmOrderModal')">
+          Xeyr
+        </button>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        toastr.options = {
+          positionClass: "toast-bottom-right",
+          closeButton: true,
+          debug: false,
+          newestOnTop: false,
+          progressBar: true,
+          preventDuplicates: false,
+          showDuration: "1000",
+          hideDuration: "1000",
+          timeOut: "6000",
+          extendedTimeOut: "1000",
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut",
+        };
+      });
+
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5007/orderHub")
+        .build();
+
+      connection.start().catch(function (err) {
+        return console.error(err.toString());
+      });
+
+      connection.on("OrderPrepared", function (orderItem, tableNumber) {
+        toastr.success(
+          `Masa ${tableNumber} üçün ${orderItem.productName} hazırdır.`
+        );
+      });
+
+      connection.on("CallWaiter", function (tableNumber) {
+        toastr.info(
+          `${tableNumber} nömrəli masa ofisiantı çağırır.`
+        );
+      });
+    </script>
+    <script src="./assets/js/Waiter.js"></script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kitchen Window</title>
+    <link rel="stylesheet" href="/assets/css/sass/WaiterPanel.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Mətbəx paneli</h1>
+      <ul id="orderList"></ul>
+    </div>
+
+    <script>
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5007/orderHub")
+        .build();
+
+      connection.start().catch(function (err) {
+        return console.error(err.toString());
+      });
+
+      connection.on("OrderUpdated", function (orderItems, tableNumber) {
+        const orderList = document.getElementById("orderList");
+
+        orderItems.forEach((item) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${item.quantity} ədəd ${item.productName} `;
+          listItem.setAttribute("data-table", tableNumber);
+
+          const preparedButton = document.createElement("button");
+          preparedButton.textContent = "Hazırdır";
+          preparedButton.onclick = function () {
+            markAsPrepared(item, tableNumber, listItem);
+          };
+
+          listItem.appendChild(preparedButton);
+          orderList.appendChild(listItem);
+        });
+      });
+
+      async function markAsPrepared(orderItem, tableNumber, listItem) {
+        try {
+          await connection.invoke("OrderPrepared", orderItem, tableNumber);
+          listItem.remove();
+        } catch (err) {
+          console.error(err.toString());
+        }
+      }
+    </script>
+  </body>
+</html>

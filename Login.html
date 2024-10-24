@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giriş</title>
+    <link rel="stylesheet" href="./assets/css/sass/Login.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+  </head>
+  <body>
+    <section class="login-container">
+      <div class="login-box">
+        <h2>Xoş Gəlmisiniz</h2>
+        <form id="login-form">
+          <div class="input-group">
+            <label for="email">İstifadəçi Adı</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="input-group">
+            <label for="password">Şifrə</label>
+            <input type="text" id="password" name="password" value="Nov2005!!" required />
+          </div>
+          <button type="submit" class="btn-login">Daxil Ol</button>
+          <p class="signup-link">
+            Hesabınız yoxdur? <a href="/register">Qeydiyyatdan keçin</a>
+          </p>
+          <button type="button" id="guest-login" class="btn-guest">Qonaq kimi daxil ol</button>
+        </form>
+      </div>
+    </section>
+
+    <script>
+      $(document).ready(function () {
+        $("#login-form").on("submit", function (e) {
+          e.preventDefault();
+          const email = $("#email").val();
+          const password = $("#password").val();
+
+          const clientId = "MVCUserApiClient";
+          const clientSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
+          const grantType = "password";
+
+          const body = new URLSearchParams();
+          body.append("grant_type", grantType);
+          body.append("client_id", clientId);
+          body.append("client_secret", clientSecret);
+          body.append("username", email);
+          body.append("password", password);
+
+          fetch("http://localhost:5001/connect/token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: body.toString(),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.json().then((error) => {
+                  throw new Error(error.error_description || "Login failed");
+                });
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const token = data.access_token;
+              localStorage.setItem("token", token);
+
+              // JWT decode işlemi
+              const decodedToken = jwt_decode(token);
+
+              const roles = decodedToken.roles;
+              if (roles.includes("admin")) {
+                window.location.href = "/table.html"; // Yönlendirme
+              } else if (roles.includes("director")) {
+                window.location.href = "/table.html"; // Yönlendirme
+              } else if (roles.includes("kitchen")) {
+                window.location.href = "/views/kitchen/kitchenpanel.html"; // Yönlendirme
+              } 
+              else if (roles.includes("waiter")) {
+                window.location.href = "/waiterpanel.html"; // Yönlendirme
+              }
+            })
+            .catch((error) => {
+              console.log("Error: " + error.message);
+            });
+        });
+
+        // Handle guest login button click
+        $("#guest-login").on("click", function () {
+          window.location.href = "/views/user/Companies.html";
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,173 @@
+@media only screen and (min-width: $medium-screen) {
+  table {
+    background-color: #fff;
+    padding: 10px !important;
+    border-radius: 10px;
+    width: 100%;
+    td,
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    td:first-child,
+    th:first-child {
+      padding-left: 12px;
+      padding-right: 12px;
+      width: 70px;
+      text-align: center;
+    }
+    td:last-child,
+    th:last-child {
+      padding-left: 12px;
+      padding-right: 12px;
+      width: 160px;
+      text-align: center;
+    }
+    thead {
+      tr {
+        td {
+          text-align: left;
+          input {
+            margin-left: 8px;
+            border: none;
+            outline: none;
+            width: calc(100% - 40px);
+          }
+        }
+        th {
+          width: fit-content;
+          font-weight: 500;
+        }
+        border-bottom: 2px solid #ccc;
+      }
+    }
+    tbody {
+      tr {
+        td {
+          width: fit-content;
+          font-weight: 500;
+
+          button{
+            border: none;
+            outline: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            &:hover{
+              background-color: $hover-black-background-transparent;
+            }
+            &.delete{
+              i{
+                color: $red;
+              }
+            }
+            &.primary{
+              i{
+                color: $dark-blue;
+              }
+            }
+            &.edit{
+              i{
+                color: $orange;
+              }
+            }
+          }
+
+          &.actions {
+            position: relative;
+            transition: all 0.3s ease;
+            .fa-chevron-down,.fa-chevron-up {
+              font-size: 12px;
+            }
+
+            .sub-menu {
+              list-style: none;
+              position: absolute;
+              right: 0;
+              padding: 0 10px;
+              background-color: #fff;
+              border: 2px solid #ccc;
+              border-radius: 8px;
+              z-index: 5;
+              display: none;
+              li {
+                margin: 6px 0;
+                border-radius: 6px;
+                a {
+                  gap: 10px;
+                  display: flex;
+                  flex-direction: row;
+                  text-decoration: none;
+                  align-items: center;
+                  padding: 2px 12px;
+                  p {
+                    margin: 0;
+                    color: #222;
+                  }
+                  i.fa-trash {
+                    color: $red;
+                  }
+                  i.fa-pen {
+                    color: $orange;
+                  }
+                  i.fa-search {
+                    color: $dark-blue;
+                  }
+                }
+                &:hover {
+                  background-color: $hover-black-background-transparent;
+                }
+              }
+            }
+            &:hover {
+              background-color: $hover-black-background-transparent;
+            }
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          background-color: $hover-black-background-transparent;
+        }
+      }
+    }
+  }
+  .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+
+  a {
+    color: #333; // Metin rengi
+    padding: 8px 16px;
+    margin: 0 4px;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #ddd; // Kenarlık rengi
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover,
+    &.active {
+      background-color: $primary-color; // Aktif ve hover rengi
+      color: #fff; // Metin rengi hover ve aktif durumlarda
+    }
+  }
+
+  .prev,
+  .next {
+    font-weight: bold;
+  }
+
+  .disabled {
+    color: #aaa; // Devre dışı durumdaki renk
+    pointer-events: none; // Tıklanamaz yapar
+  }
+}
+
+  .addrow{
+    margin-top: 15px;
+    width: fit-content;
+    align-self: flex-end;
+  }
+}

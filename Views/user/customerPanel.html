@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Müştəri Paneli</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+      }
+      thead {
+        background-color: #007bff;
+        color: white;
+      }
+      td {
+        background-color: #fff;
+        border: 1px solid #ddd;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      p {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: right;
+        color: #333;
+      }
+      .callWaiter {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 18px;
+        width: 100%;
+      }
+      .callWaiter:disabled {
+        background-color: #ccc;
+        color: #fff;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Masa Sifarişi məlumatları</h1>
+      <div id="orderStatus">
+        <!-- Sipariş durumu burada gösterilecek -->
+      </div>
+      <button id="callWaiterbtn" class="callWaiter" onclick="callWaiter()">
+        <i class="fas fa-concierge-bell"></i> Ofisiant çağır
+      </button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const branchId = urlParams.get("branchId");
+        const tableNumber = urlParams.get("tableNumber");
+
+        if (branchId && tableNumber) {
+          fetchOrderStatus(branchId, tableNumber);
+        } else {
+          document.getElementById("orderStatus").innerText =
+            "Geçersiz QR kodu.";
+        }
+      });
+
+      async function fetchOrderStatus(branchId, tableNumber) {
+        try {
+          const response = await fetch(
+            `http://localhost:5007/api/orders/table-status?branchId=${branchId}&tableNumber=${tableNumber}`
+          );
+          if (!response.ok) {
+            throw new Error("Sipariş durumu alınamadı.");
+          }
+          const order = await response.json();
+          displayOrderStatus(order);
+        } catch (error) {
+          console.error("Error fetching order status:", error);
+          document.getElementById("orderStatus").innerText =
+            "Sipariş durumu alınamadı.";
+        }
+      }
+
+      function displayOrderStatus(order) {
+        const orderStatusDiv = document.getElementById("orderStatus");
+        if (!order) {
+          orderStatusDiv.innerText = "Aktif sipariş bulunamadı.";
+          return;
+        }
+
+        console.log(order);
+
+        let orderHtml = `<h2>Masa: ${order.tableNumber}</h2>`;
+        orderHtml += `<table>`;
+        orderHtml += `<thead><tr><th>Məhsul</th><th>Qiymət</th><th>Miqdar</th><th>Ümumi</th></tr></thead>`;
+        order.items.forEach((item) => {
+          orderHtml += `<tr>
+                    <td>${item.productName}</td><td>${
+            item.price
+          }&#8380;</td><td>${item.quantity}</td><td>${
+            item.quantity * item.price
+          }&#8380;</td>
+                    </tr>`;
+        });
+        orderHtml += `</table>`;
+        orderHtml += `<p>Servis haqqı: ${order.serviceFee}%</p>`;
+        orderHtml += `<p>Məbləğ: ${order.totalPrice}&#8380;</p>`;
+        orderHtml += `<p>Servis məbləği: ${(order.totalPrice * order.serviceFee/100).toFixed(2)}&#8380;</p>`;
+        orderHtml += `<p>Ümumi: ${Number(order.totalPrice + (order.totalPrice * order.serviceFee/100)).toFixed(2)}&#8380;</p>`;
+        orderStatusDiv.innerHTML = orderHtml;
+      }
+
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5007/orderHub")
+        .build();
+
+      connection.start().catch(function (err) {
+        return console.error(err.toString());
+      });
+
+      async function callWaiter() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tableNumber = urlParams.get("tableNumber");
+        const btn = document.getElementById("callWaiterbtn");
+        btn.disabled = true; // Butonu devre dışı bırak
+        await connection.invoke("CallWaiter", tableNumber);
+        setTimeout(() => {
+          btn.disabled = false; // 20 saniye sonra butonu tekrar etkinleştir
+        }, 10000);
+      }
+    </script>
+  </body>
+</html>

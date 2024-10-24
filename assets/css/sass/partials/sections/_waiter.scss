@@ -1,0 +1,27 @@
+.tables-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  .table {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    width: 200px;
+    h3 {
+      margin: 0;
+    }
+  }
+}
+
+#orderForm {
+  display: flex;
+  flex-direction: column;
+  input,
+  select {
+    margin-top: 10px;
+    @include input();
+  }
+}

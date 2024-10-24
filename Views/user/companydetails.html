@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .company-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .company-description {
+            font-size: 16px;
+            color: #555;
+        }
+        .categories, .products, .branches {
+            margin-top: 20px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .branch-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .branch-card h4 {
+            margin-top: 0;
+        }
+        .branch-card p {
+            margin: 5px 0;
+        }
+        .branch-card button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .branch-card button:hover {
+            background-color: #0056b3;
+        }
+        .aside-menu {
+            position: fixed;
+            top: 0;
+            right: -440px;
+            width: 400px;
+            height: 100%;
+            background-color: #f1f1f1;
+            box-shadow: -3px 0 5px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            transition: right 0.3s ease;
+            padding: 20px;
+        }
+        .aside-menu.open {
+            right: 0;
+        }
+        .aside-menu h2 {
+            margin-top: 0;
+        }
+        .close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            float: right;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="" alt="Company Logo" class="logo">
+        <div class="company-info">
+            <div class="company-name">Company Name</div>
+            <div class="company-description">Company Description</div>
+        </div>
+    </div>
+
+    <div class="categories">
+        <div class="section-title">Kateqoriyalar</div>
+        <!-- List of categories will go here -->
+    </div>
+
+    <div class="products">
+        <div class="section-title">Məhsullar</div>
+        <!-- List of products will go here -->
+    </div>
+
+    <div class="branches">
+        <div class="section-title">Filiallar</div>
+        <div id="branchesList">
+            <!-- Branch cards will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <aside id="branchMenu" class="aside-menu">
+        <button class="close-btn" onclick="closeMenu()">Bağla</button>
+        <h2>Filial Menyusu</h2>
+        <div id="menuContent"></div>
+    </aside>
+</body>
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const companyLogoElement = document.querySelector(".logo");
+        const companyNameElement = document.querySelector(".company-name");
+        const companyDescriptionElement = document.querySelector(".company-description");
+        const categoriesContainer = document.querySelector(".categories");
+        const productsContainer = document.querySelector(".products");
+        const branchesList = document.getElementById("branchesList");
+        const menuPanel = document.getElementById("branchMenu");
+        const menuContent = document.getElementById("menuContent");
+
+        // Extract company ID from URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const companyId = urlParams.get('id');
+
+        // Function to open menu
+        window.viewMenu = function(branchId) {
+            menuContent.innerHTML = `<h3>Filialın menyusu yüklənir...</h3>`;
+            
+            // Fetch the menu (using sample data here)
+            setTimeout(() => {
+
+                fetch(`http://localhost:5004/api/menu/${branchId}`)
+                        .then(response => response.json())
+                        .then(menuData => {
+                            menuContent.innerHTML = ''; // Clear loading message
+                            menuData.data.forEach(menuItem => {
+                                const menuItemElement = document.createElement("div");
+                                menuItemElement.classList.add("menu-item");
+                                menuItemElement.innerHTML = `
+                                    <p>${menuItem.productName} - ${menuItem.price.toFixed(2)}&#8380;</p>
+                                `;
+                                menuContent.appendChild(menuItemElement);
+                            });
+                        })
+                        .catch(error => console.error("Error fetching menu items:", error));
+            }, 1000);
+            
+            menuPanel.classList.add('open');
+        }
+
+        // Function to close menu
+        window.closeMenu = function() {
+            menuPanel.classList.remove('open');
+        }
+
+        // Fetch company details
+        fetch(`http://localhost:5005/api/companies/${companyId}/details`)
+            .then(response => response.json())
+            .then(data => {
+                companyLogoElement.src = data.logoUrl;
+                companyNameElement.textContent = data.name;
+                companyDescriptionElement.textContent = data.description;
+            })
+            .catch(error => console.error("Error fetching company details:", error));
+
+        // Fetch categories
+        fetch(`http://localhost:5002/api/categories/company/${companyId}`)
+            .then(response => response.json())
+            .then(data => {
+                const categoriesList = document.createElement("ul");
+                data.data.forEach(category => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = category.name;
+                    listItem.classList.add("category-item");
+                    listItem.addEventListener("click", () => loadProductsByCategory(category.id));
+                    categoriesList.appendChild(listItem);
+                });
+                categoriesContainer.appendChild(categoriesList);
+            })
+            .catch(error => console.error("Error fetching categories:", error));
+
+        // Fetch products by category
+        function loadProductsByCategory(categoryId) {
+            productsContainer.innerHTML = '<div class="section-title">Məhsullar</div>'; // Clear previous products
+            fetch(`http://localhost:5002/api/Products/ByCategoryId/${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const productsList = document.createElement("ul");
+                    data.data.forEach(product => {
+                        const listItem = document.createElement("li");
+                        listItem.innerHTML = `${product.name} - &#8380;${product.price}`;
+                        productsList.appendChild(listItem);
+                    });
+                    productsContainer.appendChild(productsList);
+                })
+                .catch(error => console.error("Error fetching products:", error));
+        }
+
+        // Fetch branches
+        fetch(`http://localhost:5005/api/companies/${companyId}/branches`)
+            .then(response => response.json())
+            .then(data => {
+                data.data.forEach(branch => {
+                    console.log(branch);
+                    
+                    const branchCard = document.createElement("div");
+                    branchCard.classList.add("branch-card");
+
+                    branchCard.innerHTML = `
+                        <h4>Filial: ${branch.name}</h4>
+                        <p>Servis Haqqı: ${branch.serviceFee.toFixed(2)}%</p>
+                        <p>Açılış Saatı: ${branch.opening}</p>
+                        <p>Bağlanış Saatı: ${branch.closing}</p>
+                        <p>Ünvan: ${branch.address.city} şəhəri, ${branch.address.region}, ${branch.address.street} küçəsi</p>
+                        <a href="${branch.address.googleMapsLocation}" target="_blank">Xəritədə göstər</a>
+                        <br>
+                        <br>
+                        <button onclick="viewMenu('${branch.id}')">Menyuya bax</button>
+                    `;
+
+                    branchesList.appendChild(branchCard);
+                });
+            })
+            .catch(error => console.error("Error fetching branches:", error));
+
+            
+            
+    });
+</script>
+<style>
+    .category-item {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        color: blue;
+        text-decoration: none;
+    }
+    .category-item:hover {
+        background-color: #e9e9e9;
+    }
+</style>
