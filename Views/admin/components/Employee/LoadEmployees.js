@@ -1,5 +1,7 @@
 async function loadEmployees() {
   const token = localStorage.getItem("token");
+  const decodedToken = jwt_decode(token);
+  const userRole = decodedToken.roles;
   try {
     const response = await fetch("http://localhost:5006/api/employees", {
       method: "GET",
@@ -16,8 +18,9 @@ async function loadEmployees() {
 
     employees.data.forEach((employee, index) => {
       const row = document.createElement("tr");
-      row.innerHTML = `
-                <td>${++index}</td>
+      if (userRole === "admin") {
+        row.innerHTML += `
+        <td>${++index}</td>
                 <td>${employee.userName}</td>
                 <td>${employee.email}</td>
                 <td>${employee.branchId}</td>
@@ -26,14 +29,34 @@ async function loadEmployees() {
                     <button onclick="openRoleEditModal('${
                       employee.id
                     }')" class="primary"><i class="fas fa-key"></i></button>
-                    <button onclick="openChangeBranchModal('${
+                    <button onclick="openChangeCompanyModal('${
                       employee.id
                     }')" class="primary"><i class="fas fa-building"></i></button>
                     <button onclick="openDeleteUserModal('${
                       employee.id
                     }')" class="delete"><i class="fas fa-trash"></i></button>
-                </td>
-            `;
+                    </td>`;
+      } else {
+        row.innerHTML = `
+        <td>${++index}</td>
+        <td>${employee.userName}</td>
+        <td>${employee.email}</td>
+        <td>${employee.branchId}</td>
+        <td>${employee.roles}</td>
+        <td>
+            <button onclick="openRoleEditModal('${
+              employee.id
+            }')" class="primary"><i class="fas fa-key"></i></button>
+            <button onclick="openChangeBranchModal('${
+              employee.id
+            }')" class="primary"><i class="fas fa-building"></i></button>
+            <button onclick="openDeleteUserModal('${
+              employee.id
+            }')" class="delete"><i class="fas fa-trash"></i></button>
+            </td>
+    `;
+      }
+
       tbody.appendChild(row);
     });
   } catch (error) {
@@ -79,6 +102,44 @@ async function openChangeBranchModal(userId) {
   }
 }
 
+async function openChangeCompanyModal(userId) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await fetch("http://localhost:5005/api/companies", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Branches could not be loaded.");
+    }
+
+    const companies = await response.json();
+    const companySelect = document.getElementById("companySelect");
+    companySelect.innerHTML = companies
+      .map(
+        (company) => `
+        <option value="${company.id}">${company.name}</option>
+      `
+      )
+      .join("");
+
+    document
+      .getElementById("changeCompanyForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        changeUserCompany(userId);
+      });
+
+    openModal("changeCompanyModal");
+  } catch (error) {
+    console.error("Error loading branches:", error);
+  }
+}
+
 async function changeUserBranch(userId) {
   const token = localStorage.getItem("token");
   const form = document.getElementById("changeBranchForm");
@@ -104,6 +165,34 @@ async function changeUserBranch(userId) {
     loadEmployees(); // Reload employees to reflect changes
   } catch (error) {
     console.error("Error changing branch:", error);
+  }
+}
+
+async function changeUserCompany(userId) {
+  const token = localStorage.getItem("token");
+  const form = document.getElementById("changeCompanyForm");
+  const formData = new FormData(form);
+  const companyId = formData.get("company");
+
+  try {
+    const response = await fetch(
+      `http://localhost:5006/api/employees/updatecompany?userId=${userId}&companyId=${companyId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Company could not be changed.");
+    }
+    closeModal("changeCompanyModal");
+    loadEmployees(); // Reload employees to reflect changes
+  } catch (error) {
+    console.error("Error changing company:", error);
   }
 }
 
@@ -169,7 +258,7 @@ async function assignRole(userId) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
-        }
+        },
       }
     );
 

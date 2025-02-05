@@ -176,6 +176,7 @@ async function openOrderModal(branchId, tableNumber, orderId) {
 }
 
 function addProductEntry() {
+
   const productEntries = document.getElementById("productEntries");
   const newEntry = document.createElement("div");
   newEntry.classList.add("product-entry");

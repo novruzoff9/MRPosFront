@@ -42,7 +42,8 @@
           </div>
           <div class="input-group">
             <label for="password">Şifrə</label>
-            <input type="text" id="password" name="password" value="Nov2005!!" required />
+            <!-- <input type="password" id="password" name="password" value="Nov2005!!" required /> -->
+            <input type="password" id="password" name="password" required />
           </div>
           <button type="submit" class="btn-login">Daxil Ol</button>
           <p class="signup-link">
@@ -98,7 +99,10 @@
                 window.location.href = "/table.html"; // Yönlendirme
               } else if (roles.includes("director")) {
                 window.location.href = "/table.html"; // Yönlendirme
-              } else if (roles.includes("kitchen")) {
+              } else if (roles.includes("boss")) {
+                window.location.href = "/table.html"; // Yönlendirme
+              }  
+              else if (roles.includes("kitchen")) {
                 window.location.href = "/views/kitchen/kitchenpanel.html"; // Yönlendirme
               } 
               else if (roles.includes("waiter")) {

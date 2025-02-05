@@ -313,6 +313,27 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal for changing user's company -->
+      <div id="changeCompanyModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal('changeCompanyModal')"
+            >&times;</span
+          >
+          <h2>İşçinin şirkətini dəyiş</h2>
+          <div id="change-company-modal-body">
+            <form id="changeCompanyForm">
+              <div>
+                <label for="companySelect">Şirkəti seç:</label>
+                <select id="companySelect" name="company">
+                  <!-- Company options will be dynamically loaded here -->
+                </select>
+              </div>
+              <button type="submit" class="primaryaction">Şirkəti dəyiş</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="./assets/js/Layout.js"></script>
@@ -326,6 +347,7 @@
     <script src="./Views/admin/components/Product/LoadProducts.js"></script>
     <script src="./Views/admin/components/Table/LoadTables.js"></script>
     <script src="./Views/admin/components/Order/LoadOrder.js"></script>
+    <script src="./Views/admin/components/Company/LoadCompanies.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -376,7 +398,23 @@
             </div>
           </li>
         `;
-          } else {
+          } else if(userRole === "admin")
+          {
+            sidebar.innerHTML = `
+          <li>
+            <a href="/companies" class="aside-link">
+              <i class="fas fa-building"></i>
+              <p>Şirkətlər</p>
+            </a>
+          </li>
+          <li>
+            <a href="/employees" class="aside-link">
+              <i class="fas fa-user-tie"></i>
+              <p>İşçilər</p>
+            </a>
+          </li>
+        `;
+          } else if(userRole === "boss"){
             sidebar.innerHTML = `
           <li class="active">
             <a href="#" class="aside-link">
@@ -497,6 +535,17 @@
               adddata = "http://localhost:5005/api/branches";
               newDataName.innerHTML = "Filial";
               pageToLoad = "./views/admin/components/Branch/BranchCreate.html";
+              break;
+            case "/companies":
+              tableView = await fetch(
+                "./views/admin/components/Company/CompanyTable.html"
+              );
+              table.innerHTML = await tableView.text();
+              loadCompanies();
+
+              adddata = "http://localhost:5005/api/companies";
+              newDataName.innerHTML = "Şirkət";
+              pageToLoad = "./views/admin/components/Company/CompanyCreate.html";
               break;
             case "/products":
               // If the user is not a branch manager, show all products
